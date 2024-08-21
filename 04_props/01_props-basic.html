@@ -11,10 +11,37 @@
 <body>
     <div id = "root"></div>
 
+        <!-- 
+        props
+        properties 의 약아로 컴포넌트의 속서을 설정할 때 사용하는 요소
+        props 값은 해당 컴포넌트를 사용하는 부모 컴포넌트에서 설정 가능하다.
+        (부모 컴포넌트 없이도 props 재료를 컴포넌트에 줄 수 있다.)
+        props 는 읽지전용 객체이기 때문에 수정해서는 안된다.
 
+        리액트의 규칙
+        " 모든 React 컴포넌트는 자신의 props 를 다룰때 반드시 순수함수 처럼 동작해야한다. "
+        순수함수 : 동일한 입력값에 대해 동일한 결과를 반환하는 것
+        -->
     <script type = "text/babel">
         const name1 = 'HongGilDong'
-        ReactDOM.createRoot(document.getElementById('root')).render(element);
+        const name2 = 'YuGaunSun'
+        // 함수형 컴포넌트
+        // 컴포넌트 호출시 PROPS 를 넘거지 않으면 PROPS 는 빈객체를 생성
+        function Title(props){
+            console.log(props);
+            return <h1>Hello {props.name}</h1>
+        }
+        // props.name 이 존재하지 않은경우 기본값 설정
+        Title.defaultProps = {
+            name: 'Gujji'
+        };
+        ReactDOM.createRoot(document.getElementById('root')).render(
+            [        
+            <Title name={name1} key = '1'/>,
+            <Title name={name2}/>,
+            <Title name={'구찌'}/>,
+            ]   
+        );
     </script>
 </body>
 </html>
