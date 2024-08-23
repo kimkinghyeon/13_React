@@ -15,7 +15,8 @@
 
         const promise = new Promise((resolve,reject)=>{setTimeout(
         ()=>{const result = number +10;
-        if(result > 50){
+        
+            if(result > 50){
             const e = new Error('numberToobig');
             return reject(e);
                 }

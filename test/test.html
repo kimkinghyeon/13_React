@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>To-Do List</title>
+    <link rel="stylesheet" href="test.css"> 
+</head>
+<body>
+    <div id="root"></div>
+
+    <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+    <script type="text/babel">
+        const { useReducer } = React;
+
+        const todolist = {
+            list: [{ id: 1, name: '오늘의 할일을 적어보세요.', check: false }],
+            input: '',
+            nextId: 2,
+        };
+
+        function reducer(state, action) {
+            switch (action.type) {
+                case 'REMOVE':
+                    return {
+                        ...state,
+                        list: state.list.filter(item => item.id !== action.id)
+                    };
+                case 'ADD':
+                    return {
+                        ...state,
+                        list: [...state.list, { id: state.nextId, name: action.name, check: false }],
+                        nextId: state.nextId + 1,
+                        input: '',
+                    };
+                case 'INPUT':
+                    return {
+                        ...state,
+                        input: action.text,
+                    };
+                case 'CHECKED':
+                    return {
+                        ...state,
+                        list: state.list.map(item =>
+                            item.id === action.id ? { ...item, check: action.check } : item
+                        ).sort((a, b) => b.check - a.check),
+                    };
+                default:
+                    return state;
+            }
+        }
+
+        function Test() {
+            const [state, dispatch] = useReducer(reducer, todolist);
+
+            const onCheckHandler = (e) => {
+                const id = parseInt(e.target.id);
+                const isChecked = e.target.checked;
+                dispatch({ type: 'CHECKED', id, check: isChecked });
+            };
+
+            const onRemove = id => { dispatch({ type: 'REMOVE', id }); };
+
+            const onChangeHandler = e => dispatch({ type: 'INPUT', text: e.target.value });
+
+            const onClickHandler = () => { dispatch({ type: 'ADD', name: state.input }); };
+
+            const isButtonDisabled = state.input.trim() === '';
+
+            const nameList = state.list.map(item =>
+                <p key={item.id}>
+                    <input type="checkbox" id={item.id} checked={item.check} onChange={onCheckHandler} />
+                    <span className={item.check ? 'check' : ''}>{item.name}</span>
+                    <button className='button' onClick={() => onRemove(item.id)}>x</button>
+                </p>
+            );
+
+            return (
+                <div>
+                    <header className='header'>오늘의 할일 . {new Date().toLocaleDateString()}</header>
+                    <div className='todo'>TodoList</div>
+                    <div className='content'>
+                        <main className='main'>
+                            {nameList}
+                        </main>
+                        <input className='input-field' value={state.input} onChange={onChangeHandler} />
+                        <button className='button2' onClick={onClickHandler} disabled={isButtonDisabled}>추가</button>
+                    </div>
+                    <footer className='footer'>메모지 테스트</footer>
+                </div>
+            );
+        }
+
+        ReactDOM.createRoot(document.getElementById('root')).render(<Test />);
+    </script>
+</body>
+</html>
