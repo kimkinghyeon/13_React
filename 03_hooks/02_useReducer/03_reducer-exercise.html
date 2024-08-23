@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script crossorigin src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+</head>
+<body>
+    <div id = "root"></div>
+
+
+    <script type = "text/babel">
+        const {useState,useReducer} = React;
+
+        const nameslist = {
+                names: [
+                {id: 1, name:'홍길동'},
+                {id: 2, name:'이순신'},
+                {id: 3, name:'김구'},
+                ],
+                inputText:'',
+                nextId:4,
+            };
+
+            function reducer(state,action){
+                // 스위치를 이용해 각
+                switch(action.type){
+                    // 삭제
+                    case 'REMOVE':
+                        return{
+                            ...state,
+                            names: state.names.filter(name => name.id !== action.id)
+                        };
+                    // 추가
+                    case 'ADD':
+                        return{
+                            ...state,
+                            names: [...state.names, { id: state.nextId, name: action.name }],
+                            nextId: state.nextId + 1,
+                            inputText: ''
+                        };
+                    // 입력값 
+                    case 'CHANGE_INPUT':
+                        return {
+                            ...state,
+                            inputText: action.text
+                        };
+                    default:
+                        return state;
+                };
+            }
+        function App(){
+            const [state,dispatch] = useReducer(reducer,nameslist);
+            // 삭제
+            const onRemove = id => {dispatch({ type: 'REMOVE', id });}
+
+            const nameList = state.names.map(name => <li key={name.id} onClick={()=> onRemove(name.id)}>{name.name}</li>)
+            // 입력값
+            const onChangeHandler = e => dispatch({ type: 'CHANGE_INPUT', text: e.target.value })
+            // 추가
+            const onClickHandler = () => {dispatch({ type: 'ADD', name: state.inputText })}
+
+            return(
+                <>
+                    <input value={state.inputText} onChange={onChangeHandler}/>
+                    <button onClick={onClickHandler}>추가</button>
+                    {nameList}
+                </>
+            )
+        }
+    
+        ReactDOM.createRoot(document.getElementById('root')).render(<App/>);
+    </script>
+</body>
+</html>

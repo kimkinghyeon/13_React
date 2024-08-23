@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script crossorigin src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+</head>
+<body>
+    <div id="root"></div>
+    <script type="text/babel">
+        
+        const { useState, useEffect } = React;
+
+        // 사용자의 입력을 저장
+        function TypingGame({ text, isDone, setIsDone }) {
+
+            const [input, setInput] = useState('');
+
+            useEffect(
+                () => {
+                    // 컴포넌트가 마운트될 때 타이머 시작
+                    const start = new Date().getTime();
+
+                    return () => {
+                        // 입력이 끝나면 언마운트 된 타이머 시간을 표시
+                        const end = new Date().getTime();
+
+                        const interval = end - start;
+                        // 경과 시간은 초로 표시
+                        alert(`${ interval } (ms)`);
+                    }
+                },
+                // 빈 배열을 넣어서 컴포넌트가 처음 마운트 될 때만 표시
+                []
+            );
+
+            // 사용자가 키를 누를 때 호출 되는 핸들러
+            const onKeyPressHandler = (e) => {
+                if(e.key == 'Enter') {
+                    // 사용자가 'Enter' 키를 눌렀을 때
+                    if(text === input) {
+                        // 입력한 값이 주어진 텍스트와 같다면 'isDone' 상태 토글 변경
+                        setIsDone(!isDone);
+                    }
+                }
+            }
+
+            return (
+                <>
+                    <h1>{ text }</h1> {/*처음 입력한 값*/}
+                    <input 
+                        type="text" 
+                        onChange={ (e) => setInput(e.target.value) } // 입력 값 변경시 상태 업데이트
+                        onKeyPress={ onKeyPressHandler } // 키가 눌릴 때 핸들러 호출
+                        value={ input } // 입력란의 값은 상태값으로 관리
+                    />
+                </>
+            );
+        }
+
+        function App() {
+            
+            const [isShow, setIsShow] = useState(false); // 게임 컴포넌트의 표시여부
+            const [isDone, setIsDone] = useState(false); // 게임 완료 여부
+            const [text, setText] = useState(''); // 처음 입력하고 표시할 텍스트
+
+            // 주석을 달아서 정리 해보세요
+            useEffect(
+                () => {
+                    setText(prompt('문자열을 입력해주세요')); 
+                    // 사용자에게 문자열 입력 요청
+                },
+                [] // 빈 배열을 넣어서 컴포넌트가 처음 마운트될 때만 실행
+            );
+            
+            // 'isDone' 상태가 변경될 때 'isShow' 상태를 변경
+            useEffect(
+                () => {
+                    setIsShow(!isShow);
+                },
+                [isDone] // 'isDone' 이 변경될 때마다 실행
+            );
+
+            return (
+                <>
+                    
+                    { isShow && <TypingGame text={ text } isDone={ isDone } setIsDone={ setIsDone }/> }
+                    { !isShow && <h1>TypingGame (!isShow)</h1> }
+                    {/* isShow 가 true 일때만 게임 컴포넌트 표시*/}
+                    
+                </>
+            );
+        }
+
+        ReactDOM.createRoot(document.getElementById('root')).render(<App/>);
+    </script>
+</body>
+</html>
