@@ -1,0 +1,20 @@
+.MenuItem{
+    width: 300px;
+    background-color: white;
+    border: 1px solid black;
+    clear: black;
+    cursor: pointer;
+    margin: 5px;
+}
+
+.MenuItem:hover{
+    background-color: black;
+    border: 1px solid black;
+    color: white;
+    margin: 5px;
+}
+
+.img{
+    width: 100px;
+    height: 100px;
+}

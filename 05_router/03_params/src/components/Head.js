@@ -1,6 +1,6 @@
 function Head(){
     return(
-            <h3>Welcome to Kingdorm of React</h3>
+            <h1>Welcome to Kingdorm of React</h1>
     )
 }
 

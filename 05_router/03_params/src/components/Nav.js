@@ -3,7 +3,7 @@ import {NavLink} from 'react-router-dom';
 function Nav(){
 
     const activeStyle = {
-        backgroundColor: 'blue',
+        backgroundColor: 'black',
         color: 'white',
     }
 
