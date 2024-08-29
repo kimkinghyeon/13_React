@@ -27,12 +27,38 @@
         const {createStore} = Redux;
 
         function counter(state =0, action){
+
+            /*
+            action 은 스토어에 운반할 데이터를 말하며 주문서와 비슷한 개념이다.
+            (action 은 꼭 이 포맷이 아니어도 되지만, 이후 redux-action 에서는 고정이므로
+            이 포멧을 유지해야함)
+            {
+                type: 'ACTIOMN_NAME',                    // 필수
+                payload: {name: 'honggildong' , age: 20} // 옵션
+            }
+            */
+
             switch(action.type){
             case 'INCREAMENT': return state +1;
             case 'DECREAMENT': return state -1;
             default: return state;
             }
         }
-    </script>
+        // 앱의 상태를 보관하는 리덕스 저장소 (store)
+        // store가 제공하는 API(기능) subscribe,dispatch,getState 가 있다.
+        const store = createStore(counter);
+
+        /*
+        스토어의 상태변화를 구독하여 실행될 콜백 함수를 전달
+        스토어의 상태값이 변하면 콜백함수가 호출된다.
+        (리액트와 연동하는 react-redux 에서는 직접 subscribe 를 호출하지 않는다.)
+        */
+
+        store.subscribe( () => console.log(store.getState()) );
+
+        store.dispatch({type: 'INCREAMENT'}) // 이때 던지는 값이 action
+        store.dispatch({type: 'INCREAMENT'}) 
+        store.dispatch({type: 'DECREAMENT'}) 
+        </script>
 </body>
 </html>
