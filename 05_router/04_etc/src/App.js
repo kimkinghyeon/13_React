@@ -4,7 +4,10 @@ import Main from './pages/Main';
 import Login from './pages/Login';
 import Error from './pages/Error'
 import MyPage from './pages/MyPage';
-
+/**
+ * 
+ * ㅇ?
+ */
 function App() {
   return (
     <div>
